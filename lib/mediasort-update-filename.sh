@@ -1,77 +1,97 @@
 #!/bin/bash
 
+echo "Prefixing filenames"
+
+filecount=1
 for filename in *
 do
 
-  echo "$filename"
+  suffix="$filename"
+  if [[ $filename == _torename_* ]]; then
+    # Do not reapply _torename_, file already contains it
+    suffix=$( echo "$filename" | cut -c 16- )
+  fi
 
-  ###
-  # Fetch parts from filename
-  ###
+  # Pad up to 4 (0000, 0001, etc)
+  filecount_padded=$( printf "%0*d\n" 4 $filecount )
 
-  extension="${filename##*.}"
+  filename_new=$(printf "_torename_%s_%s" "$filecount_padded" "$suffix")
 
-  year=$( echo "$filename" | cut -c 1-4 )
-  month=$( echo "$filename" | cut -c 5-6 )
-  day=$( echo "$filename" | cut -c 7-8 )
-  hour=$( echo "$filename" | cut -c 10-11 )
-  minute=$( echo "$filename" | cut -c 12-13 )
-  second=$( echo "$filename" | cut -c 14-15 )
+  mv "$filename" "$filename_new"
 
-  # Keywords as array (remove date, extension)
-  keywords=$( echo "$filename" | cut -c 17- )
-  keywords=$( echo "$keywords" | rev | cut -c 5- | rev )
-  IFS=',' read -a keywords <<< "$keywords"
+  filecount=$[$filecount+1]
 
-  ###
-  # Set exif date time
-  ###
+done
 
-  if [ "$extension" == "jpg" ]; then
+echo "Keywords > filename (if available)"
 
-    exif_date="$year:$month:$day $hour:$minute:$second"
+for filename in *.jpg
+do
 
-    exiv2 -M "set Exif.Image.DateTime $exif_date" "$filename"
-    exiv2 -M "set Exif.Image.DateTimeOriginal $exif_date" "$filename"
-    exiv2 -M "set Exif.Photo.DateTimeOriginal $exif_date" "$filename"
-    exiv2 -M "set Exif.Photo.DateTimeDigitized $exif_date" "$filename"
+  filename_prefix=$( echo "$filename" | cut -c 1-15 )
+  keywords=$( exiv2 -Pv -g "Iptc.Application2.Keywords" "$filename" )
+
+  if [ "$keywords" != "" ]; then
+
+    keywords=$( echo "$keywords" | tr '\n' ',' )
+    keywords=$( echo "$keywords" | sed 's/,/, /' )
+    keywords=$( echo "$keywords" | rev | cut -c 3- | rev )
+
+    filename_new="$filename_prefix$keywords.jpg"
+
+  else
+
+    filename_new="$filename_prefix.jpg"
 
   fi
 
-  ###
-  # Set keywords
-  ###
+  mv "$filename" "$filename_new"
 
-  if [ "$extension" == "jpg" ]; then
+done
 
-    # Clear existing keywords
-    exiv2 -M "del Iptc.Application2.Keywords" "$filename"
+echo "Date taken > filename (if available)"
 
-    for index in "${!keywords[@]}"
-    do
+for filename in *.jpg
+do
+    echo "$filename"
+    exiv2 -F -r '%Y%m%d_%H%M%S :basename:' "$filename"
+done
 
-      keyword="${keywords[index]}"
+echo "Date created > filename"
 
-      # Trim
-      keyword=$( echo "$keyword" | sed -e 's/^ *//' -e 's/ *$//' )
+for filename in _torename_*
+do
 
-      # Add keyword
-      exiv2 -M "add Iptc.Application2.Keywords $keyword" "$filename"
+    created=$( stat -f "%Sm" -t "%Y%m%d_%H%M%S" "$filename" )
+    filename_new="$created $filename"
 
-    done
+    mv "$filename" "$filename_new"
 
-  fi
+done
 
-  ###
-  # Set file created date
-  ###
+for filename in *
+do
 
-  touch_date="$year$month$day$hour$minute.$second"
+    date_prefix=$( echo "$filename" | cut -c 1-15 )
+    filename_extension="${filename##*.}"
+    filename_new="$date_prefix"
+    filename_orig=$( echo "$filename" | cut -c 32- )
+    possible_duplicate_date_prefix=$( echo "$filename_orig" | cut -c 1-15 )
 
-  touch -a -m -t "$touch_date" "$filename"
+    if [ "$date_prefix" == "$possible_duplicate_date_prefix" ]; then
+        filename_orig=$( echo "$filename_orig" | cut -c 17- )
+    fi
 
-  setfile_date="$month/$day/$year $hour:$minute:$second"
+    if [[ ! $filename_orig ]] ; then
+        filename_new="$date_prefix $filename_orig"
+    else
+        filename_new="$date_prefix.$filename_extension"
+    fi
 
-  xcrun SetFile -d "$setfile_date" "$filename"
+    if [[ -e $filename_new ]] ; then
+        filename_new="_$RANDOM $filename_new"
+    fi
+
+    mv "$filename" "$filename_new"
 
 done

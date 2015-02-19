@@ -41,7 +41,7 @@ Update filename
 
 ```
 cd /path/to/media/
-mediasort-update-metadata
+mediasort-update-filename
 ```
 
 Rename files to: `{{date}} {{name}}.{{ext}}`
@@ -63,7 +63,7 @@ Update metadata
 
 ```
 cd /path/to/media/
-mediasort-update-filename
+mediasort-update-metadata
 ```
 
 Set date file created, exif date taken and keywords

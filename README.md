@@ -25,9 +25,10 @@ Installation
 ============
 
 ```
+mkdir -p ~/bin/
 cd ~/bin/
-wget github.com/mediasort-update-filename.sh
-wget github.com/mediasort-update-metadata.sh
+curl -O https://raw.githubusercontent.com/turnbullm/mediasort/master/lib/mediasort-update-filename.sh
+curl -O https://raw.githubusercontent.com/turnbullm/mediasort/master/lib/mediasort-update-metadata.sh
 chmod +x mediasort-update-filename.sh
 chmod +x mediasort-update-metadata.sh
 ```

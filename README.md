@@ -47,12 +47,12 @@ Rename files to: `{{date}} {{name}}.{{ext}}`
 
 {{date}} is in the format: `YYYYMMDD_HHMMSS`
 
-*.jpg files;*
+.jpg files;
 
 - {{date}} = 'date taken' exif metadata if available, fallback to 'date file created'
 - {{name}} = from 'keywords' exif metadata
 
-*other files;*
+other files;
 
 - {{date}} = date file created
 - {{name}} = original filename

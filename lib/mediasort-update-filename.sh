@@ -34,7 +34,7 @@ do
   if [ "$keywords" != "" ]; then
 
     keywords=$( echo "$keywords" | tr '\n' ',' )
-    keywords=$( echo "$keywords" | sed 's/,/, /' )
+    keywords=$( echo "$keywords" | sed 's/,/, /g' )
     keywords=$( echo "$keywords" | rev | cut -c 3- | rev )
 
     filename_new="$filename_prefix$keywords.jpg"

@@ -84,7 +84,7 @@ do
     filename_new="$date_prefix $filename_orig"
 
     if [[ -e $filename_new ]] ; then
-        filename_new="_$RANDOM $filename_new"
+        filename_new="_DUPE_$RANDOM $filename_new"
     fi
 
     mv "$filename" "$filename_new"

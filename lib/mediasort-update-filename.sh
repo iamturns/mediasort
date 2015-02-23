@@ -73,7 +73,6 @@ for filename in *
 do
 
     date_prefix=$( echo "$filename" | cut -c 1-15 )
-    filename_extension="${filename##*.}"
     filename_new="$date_prefix"
     filename_orig=$( echo "$filename" | cut -c 32- )
     possible_duplicate_date_prefix=$( echo "$filename_orig" | cut -c 1-15 )
@@ -82,11 +81,7 @@ do
         filename_orig=$( echo "$filename_orig" | cut -c 17- )
     fi
 
-    if [[ ! $filename_orig ]] ; then
-        filename_new="$date_prefix $filename_orig"
-    else
-        filename_new="$date_prefix.$filename_extension"
-    fi
+    filename_new="$date_prefix $filename_orig"
 
     if [[ -e $filename_new ]] ; then
         filename_new="_$RANDOM $filename_new"

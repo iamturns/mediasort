@@ -1,5 +1,10 @@
 #!/bin/bash
 
+###
+ # Mediasort v0.0.1 - Manage filenames and metadata of your media files
+ # https://github.com/turnbullm/mediasort
+ ##
+
 for filename in *
 do
 

@@ -68,3 +68,11 @@ mediasort-update-metadata
 Set date file created, exif date taken and keywords
 
 Files must be in the format: `YYYYMMDD_HHMMSS keyword 1, keyword 2.jpg`
+
+Run recursively
+---------------
+
+```
+find . -type d -exec sh -c '(cd "{}" && mediasort-update-filename)' \;
+find . -type d -exec sh -c '(cd "{}" && mediasort-update-metadata)' \;
+```

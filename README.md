@@ -40,7 +40,7 @@ Update filename
 
 ```
 cd /path/to/media/
-mediasort-update-filename
+mediasort-update-filename.sh
 ```
 
 Rename files to: `{{date}} {{name}}.{{ext}}`
@@ -62,7 +62,7 @@ Update metadata
 
 ```
 cd /path/to/media/
-mediasort-update-metadata
+mediasort-update-metadata.sh
 ```
 
 Set date file created, exif date taken and keywords
@@ -73,6 +73,6 @@ Run recursively
 ---------------
 
 ```
-find . -type d -exec sh -c '(cd "{}" && mediasort-update-filename)' \;
-find . -type d -exec sh -c '(cd "{}" && mediasort-update-metadata)' \;
+find . -type d -exec sh -c '(cd "{}" && mediasort-update-filename.sh)' \;
+find . -type d -exec sh -c '(cd "{}" && mediasort-update-metadata.sh)' \;
 ```

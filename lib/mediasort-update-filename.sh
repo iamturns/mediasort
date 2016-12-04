@@ -30,7 +30,7 @@ done
 
 echo "Keywords > filename (if available)"
 
-for filename in *.jpg
+for filename in *.{jpg,JPG,jpeg,JPEG}
 do
 
   filename_prefix=$( echo "$filename" | cut -c 1-15 )

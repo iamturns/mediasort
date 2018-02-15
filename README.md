@@ -26,8 +26,8 @@ Installation
 
 ```
 cd /usr/local/bin/
-curl -O https://raw.githubusercontent.com/turnbullm/mediasort/master/lib/mediasort-update-filename.sh
-curl -O https://raw.githubusercontent.com/turnbullm/mediasort/master/lib/mediasort-update-metadata.sh
+curl -O https://raw.githubusercontent.com/iamturns/mediasort/master/lib/mediasort-update-filename.sh
+curl -O https://raw.githubusercontent.com/iamturns/mediasort/master/lib/mediasort-update-metadata.sh
 chmod +x mediasort-update-filename.sh
 chmod +x mediasort-update-metadata.sh
 ```
